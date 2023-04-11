@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chatbot</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+		}
+
+		.chat-container {
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+			overflow: hidden;
+		}
+
+		.chat-messages {
+			flex: 1;
+			overflow-y: scroll;
+			padding: 20px;
+			background-color: #f1f1f1;
+		}
+
+		.chat-input {
+			display: flex;
+			padding: 20px;
+			background-color: #f1f1f1;
+		}
+
+		.chat-input input[type="text"] {
+			flex: 1;
+			border: none;
+			padding: 10px;
+			font-size: 16px;
+			background-color: #fff;
+			margin-right: 10px;
+		}
+
+		.chat-input button[type="submit"] {
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			padding: 10px;
+			font-size: 16px;
+			cursor: pointer;
+		}
+
+		.chat-message {
+			background-color: #ddd;
+			border-radius: 5px;
+			padding: 10px;
+			margin-bottom: 10px;
+			max-width: 80%;
+		}
+
+		.chat-message.bot {
+			align-self: flex-start;
+			background-color: #4CAF50;
+			color: #fff;
+		}
+
+		.chat-message.user {
+			align-self: flex-end;
+			background-color: #ddd;
+			color: #000;
+		}
+	</style>
+</head>
+<body>
+	<div class="chat-container">
+		<div class="chat-messages" id="chat-messages"></div>
+		<form class="chat-input" id="chat-form">
+			<input type="text" id="chat-input" placeholder="Type your message here...">
+			<button type="submit">Send</button>
+		</form>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$("#chat-form").on("submit", function(event) {
+				event.preventDefault();
+				var message = $("#chat-input").val().trim();
+				if (message !== "") {
+					$("#chat-input").val("");
+					$("#chat-messages").append('<div class="chat-message user">' + message + '</div>');
+					$.ajax({
+						type: "POST",
+						url: "/send_message",
+						data: {"message": message},
+						success: function(response) {
+							$("#chat-messages").append('<div class="chat-message bot">' + response + '</div>');
+							$("#chat-messages").animate({scrollTop: $("#chat-messages")[0].scrollHeight});
+						}
+					});
+				}
+			});
+		});
+	</script>
+</body>
+</html>
