@@ -1,21 +1,14 @@
 from flask import Flask, render_template, request, redirect, session
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 from textengine import TextEngine
+import os
 
 app = Flask(__name__)
-app.secret_key = 'mysecretkey'
+app.secret_key = os.urandom(25)
 
 # Load the tokenizer and model
 tokenizer = AutoTokenizer.from_pretrained('gpt2')
 model = AutoModelForCausalLM.from_pretrained('gpt2')
-
-# Home page
-@app.route('/')
-def home():
-    if 'user' in session:
-        return render_template('index.html')
-    else:
-        return redirect('/login')
 
 # Login page
 @app.route('/login', methods=['GET', 'POST'])
@@ -72,9 +65,9 @@ def chat():
             # Save the generated response
             with open('saved_responses.txt', 'a') as f:
                 f.write(text_gen + '\n')
-            return render_template('chat.html', text=text, response=text_gen)
+            return render_template('index.html', text=text, response=text_gen)
         else:
-            return render_template('chat.html')
+            return render_template('index.html')
     else:
         return redirect('/login')
 
