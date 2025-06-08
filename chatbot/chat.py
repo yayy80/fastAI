@@ -29,7 +29,6 @@ tts_engine = pyttsx3.init() if pyttsx3 else None
 plugins = discover_plugins()
 txteng = TextEngine.textengine
 
-
 def get_user_input():
     if os.environ.get('VOICE_MODE') and sr:
         recognizer = sr.Recognizer()
@@ -66,6 +65,7 @@ def generate_response(user_text: str, history: list):
         + '\n'.join(history)
         + f"\nSentiment:{sentiment}\nBot:"
     )
+
 
     text_gen = text_generator(prompt, max_length=200, num_return_sequences=1)[0]['generated_text']
     history.append(f'Bot: {text_gen}')

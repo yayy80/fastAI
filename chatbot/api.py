@@ -3,7 +3,6 @@
 from flask import Flask, request, jsonify
 from chat import generate_response
 
-
 app = Flask(__name__)
 
 @app.after_request
