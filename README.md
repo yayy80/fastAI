@@ -22,7 +22,9 @@ class Plugin:
         return "Custom response"
 ```
 
+
 Simply place the file in the plugins folder and run `chat.py` again. The plugin will be discovered automatically. See `chatbot/plugins/offical/gpt3.py` for a more detailed example that calls the OpenAI API.
+
 
 ### Multi-language
 The bot uses a simple translation plugin to demonstrate multi-language support. Enable it by placing a plugin like `chatbot/plugins/utils/translation.py` in the plugins folder.
