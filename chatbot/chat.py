@@ -5,6 +5,7 @@ from pathlib import Path
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 from textengine import TextEngine
 from plugin_loader import discover_plugins
+
 try:
     import speech_recognition as sr
 except Exception:  # pragma: no cover - optional

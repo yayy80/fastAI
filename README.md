@@ -6,8 +6,9 @@ A minimal GPT-2 based chatbot with a simple plugin system. Each response is prin
 1. Clone this repository
 2. Run `python chatbot/chat.py`
 3. Type a prompt and wait for the generated reply
+
 ### Web and API
-Run `python chatbot/api.py` to start a simple JSON API or `python chatbot/web_app.py` for a minimal web chat interface.
+Run `python chatbot/api.py` to start a simple JSON API or `python chatbot/web_app.py` for a web chat interface. The Flask app now serves `templates/index.html`, which provides a more polished chat page.
 
 ## Plugins
 Plugins live under `chatbot/plugins/`. When `chat.py` starts it automatically loads any Python file in that directory (recursively) that defines a `Plugin` class. If the class provides a `generator(prompt)` method, its output will be printed alongside the main GPT-2 response. Example plugins include a GPT-3 wrapper and a translation plugin.
@@ -20,6 +21,7 @@ class Plugin:
     def generator(self, prompt):
         return "Custom response"
 ```
+
 
 Simply place the file in the plugins folder and run `chat.py` again. The plugin will be discovered automatically. See `chatbot/plugins/offical/gpt3.py` for a more detailed example that calls the OpenAI API.
 
