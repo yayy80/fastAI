@@ -1,86 +1,28 @@
 # fastAI
-A GPT-2 implementation with no OpenAI API key 🎉🎉🎉, that acts like a chatbot (similar to AutoGPT and gpt4all)
 
-## Examples:
-- What are burritos?
-- Write a python script that prints "Hello, World!"
+A minimal GPT-2 based chatbot with a simple plugin system. Each response is printed character by character using `textengine.py` and saved to `saved_responses.txt`. The bot now includes rudimentary natural language understanding, optional voice input/output, conversation memory and a feedback system.
 
----------------
-# Usage:
+## Usage
 1. Clone this repository
-2. Run "cd chatbot"
-3. Run "python chat.py"
-4. Wait, then type something
-5. Wait for it to finish
-6. You will see "textengine.py" in action
-7. Wait for it to finish, and see it appear in "saved_responses.txt"
+2. Run `python chatbot/chat.py`
+3. Type a prompt and wait for the generated reply
 
----------------
-# Plugin Usage
-1. Clone this repository
-2. Run "cd chatbot"
-3. Run "cd plugins"
-4. Create a new folder called your plugins name
-5. Your plugin would look like: 
-```
+### Web and API
+Run `python chatbot/api.py` to start a simple JSON API or `python chatbot/web_app.py` for a web chat interface. The Flask app now serves `templates/index.html`, which provides a more polished chat page.
+
+## Plugins
+Plugins live under `chatbot/plugins/`. When `chat.py` starts it automatically loads any Python file in that directory (recursively) that defines a `Plugin` class. If the class provides a `generator(prompt)` method, its output will be printed alongside the main GPT-2 response. Example plugins include a GPT-3 wrapper and a translation plugin.
+
+To create a plugin:
+
+```python
+# chatbot/plugins/my_plugin.py
 class Plugin:
-    def __init__(self): # if the __ __ is disapeared and its bold, its because of markdown formatting.
-        self.tasks = []
-
-    def add_task(self, task_name):
-        self.tasks.append(task_name)
-
-    def remove_task(self, task_name):
-        self.tasks.remove(task_name)
-
-    def list_tasks(self):
-        return self.tasks
+    def generator(self, prompt):
+        return "Custom response"
 ```
-6. To implement that plugin, modify chat.py as follows: 
-```
-from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
-from textengine import TextEngine
-from chatbot.plugins.offical import gpt3
-from chatbot.plugins.todo import todo.py
 
-# Load the tokenizer and model
-tokenizer = AutoTokenizer.from_pretrained('gpt2')
-model = AutoModelForCausalLM.from_pretrained('gpt2')
+Simply place the file in the plugins folder and run `chat.py` again. The plugin will be discovered automatically. See `chatbot/plugins/offical/gpt3.py` for a more detailed example that calls the OpenAI API.
 
-# Set up the text generation pipeline
-text_generator = pipeline('text-generation', model=model, tokenizer=tokenizer)
-
-# Instantiate the To-Do plugin
-todo_plugin = Plugin()
-
-# Generate some text
-text = input("Message: ")
-
-# Check if the user wants to add a task
-if text.startswith("add task"):
-    task_name = text[9:].strip()  # Extract the task name from the user input
-    todo_plugin.add_task(task_name)
-    print("Task added successfully.")
-
-# Check if the user wants to list tasks
-elif text == "list tasks":
-    tasks = todo_plugin.list_tasks()
-    print("Tasks:")
-    for task in tasks:
-        print(task)
-
-# Handle other user inputs as before
-else:
-    prompt = f"Guiding Prompt: You are a helpful assistant trained by OpenAI. Your goal is to provide appropriate and helpful responses based on the user's input. Do not guess what the user is going to say, and avoid adding other bots to the conversation, unless the user specifically requests it by including the text ""/more_ai" " in their input. Your responses should be concise and to the point, but also friendly and natural-sounding. Keep in mind that while the maximum number of tokens per response is set to 1000, it is generally better to keep your responses shorter than that, as long responses may be less engaging for the user\nUser: " + text + "\nBot:"
-    text_gen = text_generator(prompt, max_length=1000, num_return_sequences=1)[0]['generated_text']
-    # Save the generated response
-    with open('saved_responses.txt', 'a') as f:
-        f.write(text_gen + '\n')
-
-    txteng = TextEngine.textengine
-
-    gpt_3_gen = gpt3.Plugin.generator
-
-    txteng(text_gen)
-    txteng(gpt_3_gen(prompt=prompt))
-```
+### Multi-language
+The bot uses a simple translation plugin to demonstrate multi-language support. Enable it by placing a plugin like `chatbot/plugins/utils/translation.py` in the plugins folder.
