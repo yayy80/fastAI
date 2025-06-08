@@ -1,15 +1,12 @@
-import os
+import sys
+import time
 
 class TextEngine:
     @staticmethod
-    def textengine(text):
-        # Iterate over the characters in the text
-        for i in range(len(text)):
-            # Build up the current substring of the text
-            current_text = text[:i+1]
-            # Clear the console
-            os.system('cls')
-            # Convert the latest character to uppercase
-            latest_char = current_text[-1].upper()
-            # Print the current substring with the latest character uppercase
-            print(current_text[:-1] + latest_char + current_text[i+1:])
+    def textengine(text, delay=0.05):
+        """Print text character by character with an optional delay."""
+        for ch in text:
+            sys.stdout.write(ch)
+            sys.stdout.flush()
+            time.sleep(delay)
+        print()
