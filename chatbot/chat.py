@@ -1,6 +1,6 @@
 from transformers import pipeline, AutoTokenizer, AutoModelForCausalLM
 from textengine import TextEngine
-from chatbot.plugins.offical import gpt3
+from plugin_loader import discover_plugins
 
 # Load the tokenizer and model
 tokenizer = AutoTokenizer.from_pretrained('gpt2')
@@ -19,7 +19,11 @@ with open('saved_responses.txt', 'a') as f:
 
 txteng = TextEngine.textengine
 
-gpt_3_gen = gpt3.Plugin.generator
-
+plugins = discover_plugins()
 txteng(text_gen)
-txteng(gpt_3_gen(prompt=prompt))
+
+for plugin in plugins.values():
+    plugin_cls = getattr(plugin, 'Plugin', None)
+    if plugin_cls and hasattr(plugin_cls, 'generator'):
+        generator = plugin_cls().generator
+        txteng(generator(prompt=prompt))
