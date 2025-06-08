@@ -1,7 +1,6 @@
 """Basic Flask web chat interface."""
 
 from flask import Flask, request, render_template
-
 from chat import generate_response
 
 app = Flask(__name__)

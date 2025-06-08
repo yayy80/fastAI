@@ -66,6 +66,7 @@ def generate_response(user_text: str, history: list):
         + f"\nSentiment:{sentiment}\nBot:"
     )
 
+
     text_gen = text_generator(prompt, max_length=200, num_return_sequences=1)[0]['generated_text']
     history.append(f'Bot: {text_gen}')
 
@@ -98,11 +99,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-plugins = discover_plugins()
-txteng(text_gen)
-
-for plugin in plugins.values():
-    plugin_cls = getattr(plugin, 'Plugin', None)
-    if plugin_cls and hasattr(plugin_cls, 'generator'):
-        generator = plugin_cls().generator
-        txteng(generator(prompt=prompt))

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; }
+    #chat-container { width: 60%; margin: 50px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    #chat-box { white-space: pre-wrap; min-height: 300px; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; overflow-y: auto; }
+    #message { width: 80%; padding: 8px; }
+    #send { padding: 8px 16px; }
+  </style>
+</head>
+<body>
+<div id="chat-container">
+  <h1>Chatbot</h1>
+  <div id="chat-box"></div>
+  <input id="message" autofocus>
+  <button id="send">Send</button>
+</div>
+<script>
+const chatBox = document.getElementById('chat-box');
+const messageInput = document.getElementById('message');
+const sendButton = document.getElementById('send');
+
+function append(text, from) {
+  const p = document.createElement('p');
+  p.textContent = `${from}: ${text}`;
+  chatBox.appendChild(p);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+sendButton.onclick = async () => {
+  const msg = messageInput.value.trim();
+  if (!msg) return;
+  append(msg, 'You');
+  messageInput.value = '';
+  try {
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
+    });
+    const data = await res.json();
+    append(data.response, 'Bot');
+  } catch (err) {
+    append('Error contacting server', 'Bot');
+  }
+};
+
+messageInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    sendButton.click();
+  }
+});
+</script>
+</body>
+</html>
