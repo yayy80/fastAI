@@ -6,7 +6,6 @@ A minimal GPT-2 based chatbot with a simple plugin system. Each response is prin
 1. Clone this repository
 2. Run `python chatbot/chat.py`
 3. Type a prompt and wait for the generated reply
-
 ### Web and API
 Run `python chatbot/api.py` to start a simple JSON API or `python chatbot/web_app.py` for a minimal web chat interface.
 
@@ -23,6 +22,7 @@ class Plugin:
 ```
 
 Simply place the file in the plugins folder and run `chat.py` again. The plugin will be discovered automatically. See `chatbot/plugins/offical/gpt3.py` for a more detailed example that calls the OpenAI API.
+
 
 ### Multi-language
 The bot uses a simple translation plugin to demonstrate multi-language support. Enable it by placing a plugin like `chatbot/plugins/utils/translation.py` in the plugins folder.
