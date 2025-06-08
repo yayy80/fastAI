@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chatbot</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; }
+    #chat-container { width: 60%; margin: 50px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    #chat-box { white-space: pre-wrap; min-height: 300px; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; overflow-y: auto; }
+    #message { width: 80%; padding: 8px; }
+    #send { padding: 8px 16px; }
+  </style>
+</head>
+<body>
+<div id="chat-container">
+  <h1>Chatbot</h1>
+  <div id="chat-box">{{ chat }}</div>
+  <form method="post">
+    <input id="message" name="message" autofocus>
+    <input id="send" type="submit" value="Send">
+  </form>
+</div>
+</body>
+</html>
